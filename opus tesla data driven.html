@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tesla Strategic Analysis Charts</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+        .chart-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+        }
+        .framework-label {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Chart 1: Revenue Growth & Industry Evolution -->
+<div class="chart-container">
+    <span class="framework-label">Session 4: Industry Evolution</span>
+    <h3 class="chart-title">Tesla Revenue Growth & Industry Life Cycle Stages (2013-2024)</h3>
+    <p class="chart-subtitle">Demonstrating alignment with industry evolution phases</p>
+    <div class="chart-wrapper">
+        <canvas id="revenueEvolution"></canvas>
+    </div>
+</div>
+
+<!-- Chart 2: VRIO Analysis Radar -->
+<div class="chart-container">
+    <span class="framework-label">Session 2: VRIO Analysis</span>
+    <h3 class="chart-title">Tesla Core Resources VRIO Assessment</h3>
+    <p class="chart-subtitle">Sustainability of competitive advantages</p>
+    <div class="chart-wrapper">
+        <canvas id="vrioRadar"></canvas>
+    </div>
+</div>
+
+<!-- Chart 3: Porter's Five Forces -->
+<div class="chart-container">
+    <span class="framework-label">Session 1: Five Forces</span>
+    <h3 class="chart-title">Industry Attractiveness: Five Forces Analysis Evolution</h3>
+    <p class="chart-subtitle">2013 vs 2024 Comparison</p>
+    <div class="chart-wrapper">
+        <canvas id="fiveForces"></canvas>
+    </div>
+</div>
+
+<!-- Chart 4: Value Chain Integration -->
+<div class="chart-container">
+    <span class="framework-label">Session 3: Value Chain</span>
+    <h3 class="chart-title">Tesla's Vertical Integration Strategy</h3>
+    <p class="chart-subtitle">Make vs Buy decisions across the value chain</p>
+    <div class="chart-wrapper">
+        <canvas id="valueChain"></canvas>
+    </div>
+</div>
+
+<div class="grid-container">
+    <!-- Chart 5: Market Structure Evolution -->
+    <div class="chart-container">
+        <span class="framework-label">Session 1: Market Structure</span>
+        <h3 class="chart-title">EV Market Structure Evolution</h3>
+        <p class="chart-subtitle">Concentration and competitive dynamics</p>
+        <div class="chart-wrapper" style="height: 350px;">
+            <canvas id="marketStructure"></canvas>
+        </div>
+    </div>
+
+    <!-- Chart 6: Innovation Appropriability -->
+    <div class="chart-container">
+        <span class="framework-label">Session 5: Appropriability</span>
+        <h3 class="chart-title">Innovation Value Capture Mechanisms</h3>
+        <p class="chart-subtitle">Strength of appropriability by technology domain</p>
+        <div class="chart-wrapper" style="height: 350px;">
+            <canvas id="appropriability"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Chart 7: Financial Performance Metrics -->
+<div class="chart-container">
+    <span class="framework-label">Session 2: Resource-Performance Link</span>
+    <h3 class="chart-title">Key Financial Metrics Evolution</h3>
+    <p class="chart-subtitle">Demonstrating operational leverage and capability development</p>
+    <div class="chart-wrapper">
+        <canvas id="financialMetrics"></canvas>
+    </div>
+</div>
+
+<!-- Chart 8: Scenario Analysis -->
+<div class="chart-container">
+    <span class="framework-label">Sessions 1-5 Integration</span>
+    <h3 class="chart-title">Strategic Scenario Analysis (2024-2029)</h3>
+    <p class="chart-subtitle">Revenue and market share projections under different scenarios</p>
+    <div class="chart-wrapper">
+        <canvas id="scenarioAnalysis"></canvas>
+    </div>
+</div>
+
+<script>
+// Chart 1: Revenue Growth & Industry Evolution
+const revenueCtx = document.getElementById('revenueEvolution').getContext('2d');
+new Chart(revenueCtx, {
+    type: 'line',
+    data: {
+        labels: ['2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024E'],
+        datasets: [{
+            label: 'Tesla Revenue ($B)',
+            data: [2.0, 3.2, 4.0, 7.0, 11.8, 21.5, 24.6, 31.5, 53.8, 81.5, 96.8, 105.0],
+            borderColor: '#e53935',
+            backgroundColor: 'rgba(229, 57, 53, 0.1)',
+            tension: 0.4,
+            yAxisID: 'y'
+        }, {
+            label: 'Industry Growth Phase',
+            data: [1, 1, 1.5, 2, 2, 2.5, 3, 3, 3.5, 3.5, 4, 4],
+            borderColor: '#1976d2',
+            backgroundColor: 'rgba(25, 118, 210, 0.1)',
+            borderDash: [5, 5],
+            yAxisID: 'y1'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            annotation: {
+                annotations: {
+                    emergence: {
+                        type: 'box',
+                        xMin: 0,
+                        xMax: 2,
+                        backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                        borderColor: 'transparent'
+                    },
+                    growth: {
+                        type: 'box',
+                        xMin: 2,
+                        xMax: 8,
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        borderColor: 'transparent'
+                    },
+                    maturity: {
+                        type: 'box',
+                        xMin: 8,
+                        xMax: 11,
+                        backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                        borderColor: 'transparent'
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+                title: {
+                    display: true,
+                    text: 'Revenue ($B)'
+                }
+            },
+            y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                title: {
+                    display: true,
+                    text: 'Industry Phase (1=Emergence, 4=Maturity)'
+                },
+                min: 0,
+                max: 5,
+                grid: {
+                    drawOnChartArea: false,
+                }
+            }
+        }
+    }
+});
+
+// Chart 2: VRIO Analysis Radar
+const vrioCtx = document.getElementById('vrioRadar').getContext('2d');
+new Chart(vrioCtx, {
+    type: 'radar',
+    data: {
+        labels: ['Battery Technology', 'Supercharger Network', 'Manufacturing Process', 'Software Platform', 'Autonomous Data', 'Brand Value'],
+        datasets: [{
+            label: 'Valuable',
+            data: [10, 9, 8, 10, 10, 9],
+            borderColor: '#2196f3',
+            backgroundColor: 'rgba(33, 150, 243, 0.2)',
+        }, {
+            label: 'Rare',
+            data: [9, 8, 6, 9, 10, 7],
+            borderColor: '#4caf50',
+            backgroundColor: 'rgba(76, 175, 80, 0.2)',
+        }, {
+            label: 'Inimitable',
+            data: [8, 5, 5, 8, 9, 6],
+            borderColor: '#ff9800',
+            backgroundColor: 'rgba(255, 152, 0, 0.2)',
+        }, {
+            label: 'Organized',
+            data: [9, 9, 8, 9, 8, 8],
+            borderColor: '#9c27b0',
+            backgroundColor: 'rgba(156, 39, 176, 0.2)',
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            r: {
+                angleLines: {
+                    display: true
+                },
+                suggestedMin: 0,
+                suggestedMax: 10,
+                ticks: {
+                    stepSize: 2
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// Chart 3: Porter's Five Forces
+const fiveForcesCtx = document.getElementById('fiveForces').getContext('2d');
+new Chart(fiveForcesCtx, {
+    type: 'polarArea',
+    data: {
+        labels: ['Threat of New Entrants', 'Supplier Power', 'Buyer Power', 'Threat of Substitutes', 'Competitive Rivalry'],
+        datasets: [{
+            label: '2013',
+            data: [3, 7, 4, 8, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(75, 192, 192, 0.5)',
+                'rgba(255, 205, 86, 0.5)',
+                'rgba(201, 203, 207, 0.5)',
+                'rgba(54, 162, 235, 0.5)'
+            ],
+            borderColor: [
+                'rgb(255, 99, 132)',
+                'rgb(75, 192, 192)',
+                'rgb(255, 205, 86)',
+                'rgb(201, 203, 207)',
+                'rgb(54, 162, 235)'
+            ],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            r: {
+                angleLines: {
+                    display: true
+                },
+                suggestedMin: 0,
+                suggestedMax: 10,
+                ticks: {
+                    stepSize: 2
+                },
+                pointLabels: {
+                    font: {
+                        size: 12
+                    }
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.label + ': ' + context.parsed + '/10 (Higher = Less Favorable)';
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Chart 4: Value Chain Integration
+const valueChainCtx = document.getElementById('valueChain').getContext('2d');
+new Chart(valueChainCtx, {
+    type: 'bar',
+    data: {
+        labels: ['R&D', 'Battery Prod.', 'Vehicle Assembly', 'Software', 'Sales', 'Charging', 'Service'],
+        datasets: [{
+            label: 'In-house',
+            data: [100, 70, 100, 100, 100, 95, 80],
+            backgroundColor: '#1976d2',
+        }, {
+            label: 'Hybrid/Partnership',
+            data: [0, 30, 0, 0, 0, 5, 10],
+            backgroundColor: '#42a5f5',
+        }, {
+            label: 'Outsourced',
+            data: [0, 0, 0, 0, 0, 0, 10],
+            backgroundColor: '#90caf9',
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                stacked: true,
+            },
+            y: {
+                stacked: true,
+                title: {
+                    display: true,
+                    text: 'Percentage of Activity'
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// Chart 5: Market Structure Evolution
+const marketStructureCtx = document.getElementById('marketStructure').getContext('2d');
+new Chart(marketStructureCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Tesla', 'BYD', 'VW Group', 'Stellantis', 'GM', 'Others'],
+        datasets: [{
+            label: '2024 Global EV Market Share',
+            data: [20, 25, 12, 8, 7, 28],
+            backgroundColor: [
+                '#e53935',
+                '#fb8c00',
+                '#43a047',
+                '#1e88e5',
+                '#8e24aa',
+                '#546e7a'
+            ],
+            borderWidth: 2,
+            borderColor: '#fff'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'right',
+                labels: {
+                    padding: 15,
+                    font: {
+                        size: 12
+                    }
+                }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.label + ': ' + context.parsed + '%';
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Chart 6: Innovation Appropriability
+const appropriabilityCtx = document.getElementById('appropriability').getContext('2d');
+new Chart(appropriabilityCtx, {
+    type: 'horizontalBar',
+    data: {
+        labels: ['Battery Chemistry', 'Manufacturing Process', 'Autonomous Driving', 'Charging Technology', 'Software Platform', 'Vehicle Design'],
+        datasets: [{
+            label: 'Legal Protection',
+            data: [7, 5, 8, 6, 4, 6],
+            backgroundColor: '#1976d2',
+        }, {
+            label: 'Technical Complexity',
+            data: [8, 9, 10, 5, 8, 6],
+            backgroundColor: '#388e3c',
+        }, {
+            label: 'Network Effects',
+            data: [2, 3, 9, 8, 9, 2],
+            backgroundColor: '#f57c00',
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                stacked: false,
+                title: {
+                    display: true,
+                    text: 'Appropriability Strength (0-10)'
+                },
+                max: 10
+            },
+            y: {
+                stacked: false
+            }
+        },
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// Chart 7: Financial Performance Metrics
+const financialCtx = document.getElementById('financialMetrics').getContext('2d');
+new Chart(financialCtx, {
+    type: 'line',
+    data: {
+        labels: ['2013', '2015', '2017', '2019', '2021', '2023'],
+        datasets: [{
+            label: 'Gross Margin %',
+            data: [17, 19, 23, 21, 27, 25],
+            borderColor: '#4caf50',
+            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+            yAxisID: 'y',
+            tension: 0.3
+        }, {
+            label: 'Operating Margin %',
+            data: [-3, -8, -6, 2, 12, 9.2],
+            borderColor: '#2196f3',
+            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+            yAxisID: 'y',
+            tension: 0.3
+        }, {
+            label: 'ROIC %',
+            data: [-5, -12, -8, 3, 18, 15],
+            borderColor: '#ff9800',
+            backgroundColor: 'rgba(255, 152, 0, 0.1)',
+            yAxisID: 'y',
+            tension: 0.3
+        }, {
+            label: 'Free Cash Flow ($B)',
+            data: [-0.2, -2.2, -4.1, 1.4, 5.0, 15.0],
+            borderColor: '#9c27b0',
+            backgroundColor: 'rgba(156, 39, 176, 0.1)',
+            yAxisID: 'y1',
+            tension: 0.3
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
+        plugins: {
+            legend: {
+                position: 'top',
+            }
+        },
+        scales: {
+            y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+                title: {
+                    display: true,
+                    text: 'Percentage (%)'
+                },
+                grid: {
+                    color: 'rgba(0, 0, 0, 0.05)'
+                }
+            },
+            y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                title: {
+                    display: true,
+                    text: 'FCF ($B)'
+                },
+                grid: {
+                    drawOnChartArea: false,
+                }
+            }
+        }
+    }
+});
+
+// Chart 8: Scenario Analysis
+const scenarioCtx = document.getElementById('scenarioAnalysis').getContext('2d');
+new Chart(scenarioCtx, {
+    type: 'scatter',
+    data: {
+        datasets: [{
+            label: 'Base Case',
+            data: [
+                {x: 2024, y: 105},
+                {x: 2025, y: 130},
+                {x: 2026, y: 160},
+                {x: 2027, y: 195},
+                {x: 2028, y: 235},
+                {x: 2029, y: 280}
+            ],
+            borderColor: '#2196f3',
+            backgroundColor: '#2196f3',
+            showLine: true,
+            tension: 0.3,
+            pointRadius: 5
+        }, {
+            label: 'Bull Case',
+            data: [
+                {x: 2024, y: 105},
+                {x: 2025, y: 145},
+                {x: 2026, y: 195},
+                {x: 2027, y: 260},
+                {x: 2028, y: 340},
+                {x: 2029, y: 440}
+            ],
+            borderColor: '#4caf50',
+            backgroundColor: '#4caf50',
+            showLine: true,
+            tension: 0.3,
+            pointRadius: 5
+        }, {
+            label: 'Bear Case',
+            data: [
+                {x: 2024, y: 105},
+                {x: 2025, y: 115},
+                {x: 2026, y: 125},
+                {x: 2027, y: 140},
+                {x: 2028, y: 155},
+                {x: 2029, y: 170}
+            ],
+            borderColor: '#f44336',
+            backgroundColor: '#f44336',
+            showLine: true,
+            tension: 0.3,
+            pointRadius: 5
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.dataset.label + ': $' + context.parsed.y + 'B';
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: 'Year'
+                },
+                ticks: {
+                    stepSize: 1,
+                    callback: function(value) {
+                        return value;
+                    }
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Revenue ($B)'
+                }
+            }
+        }
+    }
+});
+</script>
+
+</body>
+</html>

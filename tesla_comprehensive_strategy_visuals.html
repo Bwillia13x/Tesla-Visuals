@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tesla Comprehensive Strategy Analysis - Advanced Visualizations</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(45deg, #dc143c, #ff4757);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(220, 20, 60, 0.3);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .visualization-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .viz-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .viz-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #ff4757;
+            text-align: center;
+        }
+        
+        .axis {
+            font-size: 12px;
+        }
+        
+        .axis-label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            border: 1px solid #ff4757;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .legend {
+            font-size: 12px;
+            margin-top: 20px;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .sankey-node rect {
+            cursor: move;
+            fill-opacity: .9;
+            shape-rendering: crispEdges;
+        }
+        
+        .sankey-node text {
+            pointer-events: none;
+            text-shadow: 0 1px 0 #fff;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .sankey-link {
+            fill: none;
+            stroke-opacity: .2;
+        }
+        
+        .sankey-link:hover {
+            stroke-opacity: .5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Tesla Comprehensive Strategy Analysis</h1>
+            <p>Advanced Strategic Framework Visualizations</p>
+        </div>
+        
+        <div class="visualization-grid">
+            <!-- Platform Economics Visualization -->
+            <div class="viz-container">
+                <div class="viz-title">Platform Economics: Network Effects Analysis</div>
+                <div id="platform-economics"></div>
+            </div>
+            
+            <!-- Disruption Theory Timeline -->
+            <div class="viz-container">
+                <div class="viz-title">Clayton Christensen's Disruption Theory: Tesla's Path</div>
+                <div id="disruption-timeline"></div>
+            </div>
+            
+            <!-- Blue Ocean Strategy Canvas -->
+            <div class="viz-container full-width">
+                <div class="viz-title">Blue Ocean Strategy Canvas: Tesla vs Traditional Automakers</div>
+                <div id="blue-ocean-canvas"></div>
+            </div>
+            
+            <!-- Technology Adoption Lifecycle -->
+            <div class="viz-container">
+                <div class="viz-title">Technology Adoption Lifecycle: EV Market Evolution</div>
+                <div id="adoption-lifecycle"></div>
+            </div>
+            
+            <!-- Strategic Groups Analysis -->
+            <div class="viz-container">
+                <div class="viz-title">Strategic Groups: Positioning Analysis</div>
+                <div id="strategic-groups"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Platform Economics Visualization
+        function createPlatformEconomics() {
+            const container = d3.select("#platform-economics");
+            const width = 480;
+            const height = 400;
+            
+            const svg = container.append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            
+            // Network data representing Tesla's platform ecosystem
+            const nodes = [
+                {id: "Tesla", type: "core", x: width/2, y: height/2, size: 50, color: "#dc143c"},
+                {id: "Supercharger Network", type: "infrastructure", x: width/2 - 120, y: height/2 - 80, size: 35, color: "#ff6b7a"},
+                {id: "Battery Technology", type: "technology", x: width/2 + 120, y: height/2 - 80, size: 35, color: "#ff6b7a"},
+                {id: "Software Platform", type: "technology", x: width/2, y: height/2 - 120, size: 30, color: "#ff9ff3"},
+                {id: "Energy Storage", type: "product", x: width/2 - 120, y: height/2 + 80, size: 30, color: "#ff9ff3"},
+                {id: "Solar Panels", type: "product", x: width/2 + 120, y: height/2 + 80, size: 25, color: "#f368e0"},
+                {id: "Autonomous Driving", type: "future", x: width/2, y: height/2 + 120, size: 25, color: "#f368e0"},
+                {id: "Third-party Developers", type: "external", x: width/2 - 150, y: height/2, size: 20, color: "#ffa502"},
+                {id: "Charging Partners", type: "external", x: width/2 + 150, y: height/2, size: 20, color: "#ffa502"}
+            ];
+            
+            const links = [
+                {source: "Tesla", target: "Supercharger Network", value: 10},
+                {source: "Tesla", target: "Battery Technology", value: 10},
+                {source: "Tesla", target: "Software Platform", value: 8},
+                {source: "Tesla", target: "Energy Storage", value: 7},
+                {source: "Tesla", target: "Solar Panels", value: 6},
+                {source: "Tesla", target: "Autonomous Driving", value: 9},
+                {source: "Supercharger Network", target: "Third-party Developers", value: 5},
+                {source: "Battery Technology", target: "Energy Storage", value: 8},
+                {source: "Software Platform", target: "Autonomous Driving", value: 7},
+                {source: "Charging Partners", target: "Supercharger Network", value: 6}
+            ];
+            
+            // Create links
+            svg.selectAll(".link")
+                .data(links)
+                .enter().append("line")
+                .attr("class", "link")
+                .attr("x1", d => nodes.find(n => n.id === d.source).x)
+                .attr("y1", d => nodes.find(n => n.id === d.source).y)
+                .attr("x2", d => nodes.find(n => n.id === d.target).x)
+                .attr("y2", d => nodes.find(n => n.id === d.target).y)
+                .attr("stroke", "#555")
+                .attr("stroke-width", d => d.value / 2)
+                .attr("opacity", 0.6);
+            
+            // Create nodes
+            const nodeGroups = svg.selectAll(".node")
+                .data(nodes)
+                .enter().append("g")
+                .attr("class", "node")
+                .attr("transform", d => `translate(${d.x},${d.y})`);
+            
+            nodeGroups.append("circle")
+                .attr("r", d => d.size)
+                .attr("fill", d => d.color)
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 2)
+                .on("mouseover", function(event, d) {
+                    showTooltip(event, `<strong>${d.id}</strong><br>Type: ${d.type}<br>Network Effect: ${d.type === 'core' ? 'High' : d.type === 'infrastructure' ? 'Medium-High' : 'Medium'}`);
+                })
+                .on("mouseout", hideTooltip);
+            
+            nodeGroups.append("text")
+                .text(d => d.id.length > 12 ? d.id.substring(0, 12) + "..." : d.id)
+                .attr("text-anchor", "middle")
+                .attr("dy", ".35em")
+                .attr("font-size", "10px")
+                .attr("fill", "white")
+                .attr("font-weight", "bold");
+        }
+        
+        // Disruption Theory Timeline
+        function createDisruptionTimeline() {
+            const container = d3.select("#disruption-timeline");
+            const width = 480;
+            const height = 400;
+            const margin = {top: 30, right: 30, bottom: 50, left: 60};
+            
+            const svg = container.append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            
+            const data = [
+                {year: 2008, performance: 20, market: "High-end Sports Cars", phase: "Initial Foothold"},
+                {year: 2012, performance: 35, market: "Luxury Sedans", phase: "Performance Improvement"},
+                {year: 2017, performance: 55, market: "Mass Market", phase: "Market Expansion"},
+                {year: 2020, performance: 75, market: "Mainstream Adoption", phase: "Market Leadership"},
+                {year: 2025, performance: 90, market: "Market Dominance", phase: "Full Disruption"}
+            ];
+            
+            const xScale = d3.scaleLinear()
+                .domain(d3.extent(data, d => d.year))
+                .range([margin.left, width - margin.right]);
+            
+            const yScale = d3.scaleLinear()
+                .domain([0, 100])
+                .range([height - margin.bottom, margin.top]);
+            
+            // Performance line
+            const line = d3.line()
+                .x(d => xScale(d.year))
+                .y(d => yScale(d.performance))
+                .curve(d3.curveCardinal);
+            
+            svg.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "#dc143c")
+                .attr("stroke-width", 3)
+                .attr("d", line);
+            
+            // Data points
+            svg.selectAll(".point")
+                .data(data)
+                .enter().append("circle")
+                .attr("class", "point")
+                .attr("cx", d => xScale(d.year))
+                .attr("cy", d => yScale(d.performance))
+                .attr("r", 6)
+                .attr("fill", "#ff4757")
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 2)
+                .on("mouseover", function(event, d) {
+                    showTooltip(event, `<strong>${d.year}</strong><br>Performance: ${d.performance}%<br>Market: ${d.market}<br>Phase: ${d.phase}`);
+                })
+                .on("mouseout", hideTooltip);
+            
+            // Axes
+            svg.append("g")
+                .attr("transform", `translate(0,${height - margin.bottom})`)
+                .call(d3.axisBottom(xScale).tickFormat(d3.format("d")))
+                .attr("color", "#ccc");
+            
+            svg.append("g")
+                .attr("transform", `translate(${margin.left},0)`)
+                .call(d3.axisLeft(yScale))
+                .attr("color", "#ccc");
+            
+            // Labels
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 20)
+                .attr("x", -height/2)
+                .attr("text-anchor", "middle")
+                .attr("fill", "#ccc")
+                .text("Market Performance (%)");
+            
+            svg.append("text")
+                .attr("x", width/2)
+                .attr("y", height - 10)
+                .attr("text-anchor", "middle")
+                .attr("fill", "#ccc")
+                .text("Year");
+        }
+        
+        // Blue Ocean Strategy Canvas
+        function createBlueOceanCanvas() {
+            const container = d3.select("#blue-ocean-canvas");
+            const width = 900;
+            const height = 400;
+            const margin = {top: 30, right: 30, bottom: 80, left: 80};
+            
+            const svg = container.append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            
+            const factors = [
+                "Price", "Brand Prestige", "Fuel Efficiency", "Technology Integration", 
+                "Environmental Impact", "Performance", "Service Network", "Innovation Rate",
+                "User Experience", "Charging Infrastructure"
+            ];
+            
+            const teslaData = [2, 9, 10, 10, 10, 9, 7, 10, 10, 9];
+            const traditionalData = [5, 7, 6, 4, 3, 6, 9, 4, 5, 2];
+            
+            const xScale = d3.scaleBand()
+                .domain(factors)
+                .range([margin.left, width - margin.right])
+                .padding(0.1);
+            
+            const yScale = d3.scaleLinear()
+                .domain([0, 10])
+                .range([height - margin.bottom, margin.top]);
+            
+            // Tesla line
+            const teslaLine = d3.line()
+                .x((d, i) => xScale(factors[i]) + xScale.bandwidth()/2)
+                .y(d => yScale(d))
+                .curve(d3.curveCardinal);
+            
+            svg.append("path")
+                .datum(teslaData)
+                .attr("fill", "none")
+                .attr("stroke", "#dc143c")
+                .attr("stroke-width", 3)
+                .attr("d", teslaLine);
+            
+            // Traditional automakers line
+            const traditionalLine = d3.line()
+                .x((d, i) => xScale(factors[i]) + xScale.bandwidth()/2)
+                .y(d => yScale(d))
+                .curve(d3.curveCardinal);
+            
+            svg.append("path")
+                .datum(traditionalData)
+                .attr("fill", "none")
+                .attr("stroke", "#555")
+                .attr("stroke-width", 3)
+                .attr("stroke-dasharray", "5,5")
+                .attr("d", traditionalLine);
+            
+            // Data points
+            svg.selectAll(".tesla-point")
+                .data(teslaData)
+                .enter().append("circle")
+                .attr("class", "tesla-point")
+                .attr("cx", (d, i) => xScale(factors[i]) + xScale.bandwidth()/2)
+                .attr("cy", d => yScale(d))
+                .attr("r", 5)
+                .attr("fill", "#dc143c")
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 2);
+            
+            svg.selectAll(".traditional-point")
+                .data(traditionalData)
+                .enter().append("circle")
+                .attr("class", "traditional-point")
+                .attr("cx", (d, i) => xScale(factors[i]) + xScale.bandwidth()/2)
+                .attr("cy", d => yScale(d))
+                .attr("r", 5)
+                .attr("fill", "#555")
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 2);
+            
+            // Axes
+            svg.append("g")
+                .attr("transform", `translate(0,${height - margin.bottom})`)
+                .call(d3.axisBottom(xScale))
+                .attr("color", "#ccc")
+                .selectAll("text")
+                .attr("transform", "rotate(-45)")
+                .style("text-anchor", "end");
+            
+            svg.append("g")
+                .attr("transform", `translate(${margin.left},0)`)
+                .call(d3.axisLeft(yScale))
+                .attr("color", "#ccc");
+            
+            // Legend
+            const legend = svg.append("g")
+                .attr("transform", `translate(${width - 200}, 50)`);
+            
+            legend.append("line")
+                .attr("x1", 0).attr("x2", 20)
+                .attr("y1", 0).attr("y2", 0)
+                .attr("stroke", "#dc143c")
+                .attr("stroke-width", 3);
+            
+            legend.append("text")
+                .attr("x", 25).attr("y", 5)
+                .text("Tesla")
+                .attr("fill", "#ccc");
+            
+            legend.append("line")
+                .attr("x1", 0).attr("x2", 20)
+                .attr("y1", 20).attr("y2", 20)
+                .attr("stroke", "#555")
+                .attr("stroke-width", 3)
+                .attr("stroke-dasharray", "5,5");
+            
+            legend.append("text")
+                .attr("x", 25).attr("y", 25)
+                .text("Traditional Automakers")
+                .attr("fill", "#ccc");
+        }
+        
+        // Technology Adoption Lifecycle
+        function createAdoptionLifecycle() {
+            const container = d3.select("#adoption-lifecycle");
+            const width = 480;
+            const height = 400;
+            const margin = {top: 30, right: 30, bottom: 50, left: 60};
+            
+            const svg = container.append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            
+            const data = [
+                {stage: "Innovators", percentage: 2.5, color: "#ff6b7a", year: "2008-2012"},
+                {stage: "Early Adopters", percentage: 13.5, color: "#ff9ff3", year: "2012-2017"},
+                {stage: "Early Majority", percentage: 34, color: "#f368e0", year: "2017-2022"},
+                {stage: "Late Majority", percentage: 34, color: "#ffa502", year: "2022-2027"},
+                {stage: "Laggards", percentage: 16, color: "#ff7675", year: "2027+"}
+            ];
+            
+            let currentY = margin.top;
+            
+            data.forEach(d => {
+                const barHeight = (d.percentage / 100) * (height - margin.top - margin.bottom);
+                
+                svg.append("rect")
+                    .attr("x", margin.left)
+                    .attr("y", currentY)
+                    .attr("width", width - margin.left - margin.right)
+                    .attr("height", barHeight)
+                    .attr("fill", d.color)
+                    .attr("opacity", 0.8)
+                    .attr("stroke", "#fff")
+                    .attr("stroke-width", 1)
+                    .on("mouseover", function(event) {
+                        showTooltip(event, `<strong>${d.stage}</strong><br>Percentage: ${d.percentage}%<br>Period: ${d.year}`);
+                    })
+                    .on("mouseout", hideTooltip);
+                
+                svg.append("text")
+                    .attr("x", width/2)
+                    .attr("y", currentY + barHeight/2)
+                    .attr("text-anchor", "middle")
+                    .attr("dy", ".35em")
+                    .attr("fill", "white")
+                    .attr("font-weight", "bold")
+                    .text(`${d.stage} (${d.percentage}%)`);
+                
+                currentY += barHeight;
+            });
+            
+            // Current position indicator
+            svg.append("line")
+                .attr("x1", margin.left - 10)
+                .attr("x2", width - margin.right + 10)
+                .attr("y1", margin.top + (2.5 + 13.5 + 34) / 100 * (height - margin.top - margin.bottom))
+                .attr("y2", margin.top + (2.5 + 13.5 + 34) / 100 * (height - margin.top - margin.bottom))
+                .attr("stroke", "#dc143c")
+                .attr("stroke-width", 3)
+                .attr("stroke-dasharray", "10,5");
+            
+            svg.append("text")
+                .attr("x", width - margin.right + 15)
+                .attr("y", margin.top + (2.5 + 13.5 + 34) / 100 * (height - margin.top - margin.bottom))
+                .attr("dy", ".35em")
+                .attr("fill", "#dc143c")
+                .attr("font-weight", "bold")
+                .text("Current Position (2024)");
+        }
+        
+        // Strategic Groups Analysis
+        function createStrategicGroups() {
+            const container = d3.select("#strategic-groups");
+            const width = 480;
+            const height = 400;
+            const margin = {top: 30, right: 30, bottom: 60, left: 80};
+            
+            const svg = container.append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            
+            const companies = [
+                {name: "Tesla", innovation: 95, premium: 90, size: 25, color: "#dc143c"},
+                {name: "Mercedes EQS", innovation: 70, premium: 95, size: 20, color: "#2d3436"},
+                {name: "BMW i-series", innovation: 75, premium: 85, size: 18, color: "#0984e3"},
+                {name: "Audi e-tron", innovation: 65, premium: 80, size: 16, color: "#00b894"},
+                {name: "Lucid Air", innovation: 85, premium: 95, size: 10, color: "#6c5ce7"},
+                {name: "Rivian", innovation: 80, premium: 70, size: 12, color: "#fd79a8"},
+                {name: "Nissan Leaf", innovation: 40, premium: 30, size: 15, color: "#fdcb6e"},
+                {name: "Chevy Bolt", innovation: 35, premium: 25, size: 14, color: "#e17055"},
+                {name: "Ford Mustang-E", innovation: 60, premium: 60, size: 18, color: "#74b9ff"},
+                {name: "VW ID.4", innovation: 55, premium: 50, size: 16, color: "#55a3ff"}
+            ];
+            
+            const xScale = d3.scaleLinear()
+                .domain([0, 100])
+                .range([margin.left, width - margin.right]);
+            
+            const yScale = d3.scaleLinear()
+                .domain([0, 100])
+                .range([height - margin.bottom, margin.top]);
+            
+            // Quadrant backgrounds
+            const quadrants = [
+                {x: 0, y: 50, width: 50, height: 50, label: "Low Innovation\nHigh Premium", color: "rgba(255, 99, 122, 0.1)"},
+                {x: 50, y: 50, width: 50, height: 50, label: "High Innovation\nHigh Premium", color: "rgba(220, 20, 60, 0.2)"},
+                {x: 0, y: 0, width: 50, height: 50, label: "Low Innovation\nLow Premium", color: "rgba(128, 128, 128, 0.1)"},
+                {x: 50, y: 0, width: 50, height: 50, label: "High Innovation\nLow Premium", color: "rgba(255, 165, 2, 0.1)"}
+            ];
+            
+            quadrants.forEach(q => {
+                svg.append("rect")
+                    .attr("x", xScale(q.x))
+                    .attr("y", yScale(q.y + q.height))
+                    .attr("width", xScale(q.width) - xScale(0))
+                    .attr("height", yScale(0) - yScale(q.height))
+                    .attr("fill", q.color);
+                
+                svg.append("text")
+                    .attr("x", xScale(q.x + q.width/2))
+                    .attr("y", yScale(q.y + q.height/2))
+                    .attr("text-anchor", "middle")
+                    .attr("font-size", "10px")
+                    .attr("fill", "#888")
+                    .selectAll("tspan")
+                    .data(q.label.split('\n'))
+                    .enter().append("tspan")
+                    .attr("x", xScale(q.x + q.width/2))
+                    .attr("dy", (d, i) => i * 12)
+                    .text(d => d);
+            });
+            
+            // Company bubbles
+            svg.selectAll(".company")
+                .data(companies)
+                .enter().append("circle")
+                .attr("class", "company")
+                .attr("cx", d => xScale(d.innovation))
+                .attr("cy", d => yScale(d.premium))
+                .attr("r", d => d.size)
+                .attr("fill", d => d.color)
+                .attr("opacity", 0.8)
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 2)
+                .on("mouseover", function(event, d) {
+                    showTooltip(event, `<strong>${d.name}</strong><br>Innovation Level: ${d.innovation}%<br>Premium Positioning: ${d.premium}%<br>Market Size: ${d.size}%`);
+                })
+                .on("mouseout", hideTooltip);
+            
+            // Company labels
+            svg.selectAll(".company-label")
+                .data(companies)
+                .enter().append("text")
+                .attr("class", "company-label")
+                .attr("x", d => xScale(d.innovation))
+                .attr("y", d => yScale(d.premium) - d.size - 5)
+                .attr("text-anchor", "middle")
+                .attr("font-size", "10px")
+                .attr("fill", "#ccc")
+                .attr("font-weight", "bold")
+                .text(d => d.name);
+            
+            // Axes
+            svg.append("g")
+                .attr("transform", `translate(0,${height - margin.bottom})`)
+                .call(d3.axisBottom(xScale))
+                .attr("color", "#ccc");
+            
+            svg.append("g")
+                .attr("transform", `translate(${margin.left},0)`)
+                .call(d3.axisLeft(yScale))
+                .attr("color", "#ccc");
+            
+            // Axis labels
+            svg.append("text")
+                .attr("x", width/2)
+                .attr("y", height - 10)
+                .attr("text-anchor", "middle")
+                .attr("fill", "#ccc")
+                .text("Innovation Level");
+            
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 20)
+                .attr("x", -height/2)
+                .attr("text-anchor", "middle")
+                .attr("fill", "#ccc")
+                .text("Premium Positioning");
+        }
+        
+        // Tooltip functions
+        function showTooltip(event, content) {
+            const tooltip = d3.select("#tooltip");
+            tooltip.transition().duration(200).style("opacity", .9);
+            tooltip.html(content)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        }
+        
+        function hideTooltip() {
+            d3.select("#tooltip").transition().duration(500).style("opacity", 0);
+        }
+        
+        // Initialize all visualizations
+        createPlatformEconomics();
+        createDisruptionTimeline();
+        createBlueOceanCanvas();
+        createAdoptionLifecycle();
+        createStrategicGroups();
+    </script>
+</body>
+</html>

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tesla Financial & Market Dynamics Analysis</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            color: #ffffff;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(45deg, #dc143c, #ff4757);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(220, 20, 60, 0.3);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.8em;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+        
+        .visualization-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .viz-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .viz-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #ff4757;
+            text-align: center;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .axis {
+            font-size: 12px;
+            color: #ccc;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.95);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            border: 1px solid #ff4757;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            max-width: 300px;
+        }
+        
+        .legend {
+            font-size: 12px;
+            margin-top: 15px;
+        }
+        
+        .waterfall-bar {
+            cursor: pointer;
+        }
+        
+        .sankey-link {
+            fill: none;
+            stroke-opacity: 0.3;
+        }
+        
+        .sankey-link:hover {
+            stroke-opacity: 0.6;
+        }
+        
+        .node-label {
+            font-size: 11px;
+            font-weight: bold;
+            fill: white;
+        }
+        
+        .matrix-cell {
+            stroke: #333;
+            stroke-width: 1;
+            cursor: pointer;
+        }
+        
+        .heatmap-label {
+            font-size: 10px;
+            fill: white;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Tesla Financial & Market Dynamics</h1>
+            <p>Strategic Financial Analysis and Market Position Visualization</p>
+        </div>
+        
+        <div class="visualization-grid">
+            <!-- Cost Structure Waterfall -->
+            <div class="viz-container">
+                <div class="viz-title">Manufacturing Cost Breakdown: Tesla vs Traditional OEMs</div>
+                <div id="cost-waterfall"></div>
+            </div>
+            
+            <!-- Market Cap Evolution -->
+            <div class="viz-container">
+                <div class="viz-title">Market Capitalization Evolution (2010-2024)</div>
+                <div id="market-cap-evolution"></div>
+            </div>
+            
+            <!-- Revenue Streams Sankey -->
+            <div class="viz-container full-width">
+                <div class="viz-title">Tesla Revenue Streams and Value Chain Flow</div>
+                <div id="revenue-sankey"></div>
+            </div>
+            
+            <!-- Competitive Financial Matrix -->
+            <div class="viz-container">
+                <div class="viz-title">Financial Performance Matrix: Tesla vs Competitors</div>
+                <div id="financial-matrix"></div>
+            </div>
+            
+            <!-- Investment Thesis Timeline -->
+            <div class="viz-container">
+                <div class="viz-title">Investment Thesis Evolution</div>
+                <div id="investment-timeline"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Cost Structure Waterfall Chart
+        function createCostWaterfall() {
+            const container = d3.select("#cost-waterfall");
+            const width = 500;
+            const height = 400;
+            const margin = {top: 30, right: 30, bottom: 80, left: 80};
+            
+            const svg = container.append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            
+            const data = [
+                {category: "Raw Materials", tesla: 35, traditional: 40, difference: -5},
+                {category: "Labor", tesla: 15, traditional: 25, difference: -10},
+                {category: "R&D", tesla: 20, traditional: 12, difference: 8},
+                {category: "Manufacturing", tesla: 12, traditional: 15, difference: -3},
+                {category: "Sales & Marketing", tesla: 8, traditional: 18, difference: -10},
+                {category: "Administrative", tesla: 10, traditional: 15, difference: -5}
+            ];
+            
+            const categories = data.map(d => d.category);
+            const xScale = d3.scaleBand()
+                .domain(categories)
+                .range([margin.left, width - margin.right])
+                .padding(0.2);
+            
+            const yScale = d3.scaleLinear()
+                .domain([0, 45])
+                .range([height - margin.bottom, margin.top]);
+            
+            // Tesla bars
+            svg.selectAll(".tesla-bar")
+                .data(data)
+                .enter().append("rect")
+                .attr("class", "tesla-bar")
+                .attr("x", d => xScale(d.category))
+                .attr("y", d => yScale(d.tesla))
+                .attr("width", xScale.bandwidth() / 2)
+                .attr("height", d => yScale(0) - yScale(d.tesla))
+                .attr("fill", "#dc143c")
+                .attr("opacity", 0.8)
+                .on("mouseover", function(event, d) {
+                    showTooltip(event, `<strong>Tesla - ${d.category}</strong><br>Cost: ${d.tesla}%<br>vs Traditional: ${d.traditional}%<br>Difference: ${d.difference > 0 ? '+' : ''}${d.difference}%`);
+                })
+                .on("mouseout", hideTooltip);
+            
+            // Traditional OEM bars
+            svg.selectAll(".traditional-bar")
+                .data(data)
+                .enter().append("rect")
+                .attr("class", "traditional-bar")
+                .attr("x", d => xScale(d.category) + xScale.bandwidth() / 2)
+                .attr("y", d => yScale(d.traditional))
+                .attr("width", xScale.bandwidth() / 2)
+                .attr("height", d => yScale(0) - yScale(d.traditional))
+                .attr("fill", "#666")
+                .attr("opacity", 0.8)
+                .on("mouseover", function(event, d) {
+                    showTooltip(event, `<strong>Traditional OEM - ${d.category}</strong><br>Cost: ${d.traditional}%<br>vs Tesla: ${d.tesla}%<br>Difference: ${-d.difference > 0 ? '+' : ''}${-d.difference}%`);
+                })
+                .on("mouseout", hideTooltip);
+            
+            // Axes
+            svg.append("g")
+                .attr("transform", `translate(0,${height - margin.bottom})`)
+                .call(d3.axisBottom(xScale))
+                .attr("color", "#ccc")
+                .selectAll("text")
+                .attr("transform", "rotate(-45)")
+                .style("text-anchor", "end");
+            
+            svg.append("g")
+                .attr("transform", `translate(${margin.left},0)`)
+                .call(d3.axisLeft(yScale))
+                .attr("color", "#ccc");
+            
+            // Legend
+            const legend = svg.append("g")
+                .attr("transform", `translate(${width - 150}, 50)`);
+            
+            legend.append("rect")
+                .attr("width", 15).attr("height", 15)
+                .attr("fill", "#dc143c");
+            legend.append("text")
+                .attr("x", 20).attr("y", 12)
+                .text("Tesla").attr("fill", "#ccc");
+            
+            legend.append("rect")
+                .attr("y", 20)
+                .attr("width", 15).attr("height", 15)
+                .attr("fill", "#666");
+            legend.append("text")
+                .attr("x", 20).attr("y", 32)
+                .text("Traditional OEM").attr("fill", "#ccc");
+        }
+        
+        // Market Cap Evolution
+        function createMarketCapEvolution() {
+            const container = d3.select("#market-cap-evolution");
+            const width = 500;
+            const height = 400;
+            const margin = {top: 30, right: 100, bottom: 50, left: 80};
+            
+            const svg = container.append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            
+            const companies = [
+                {
+                    name: "Tesla",
+                    color: "#dc143c",
+                    data: [
+                        {year: 2010, value: 2}, {year: 2012, value: 3}, {year: 2014, value: 25},
+                        {year: 2016, value: 30}, {year: 2018, value: 50}, {year: 2020, value: 650},
+                        {year: 2021, value: 1000}, {year: 2022, value: 800}, {year: 2024, value: 750}
+                    ]
+                },
+                {
+                    name: "Toyota",
+                    color: "#666",
+                    data: [
+                        {year: 2010, value: 120}, {year: 2012, value: 140}, {year: 2014, value: 180},
+                        {year: 2016, value: 170}, {year: 2018, value: 200}, {year: 2020, value: 220},
+                        {year: 2021, value: 250}, {year: 2022, value: 200}, {year: 2024, value: 230}
+                    ]
+                },
+                {
+                    name: "GM",
+                    color: "#888",
+                    data: [
+                        {year: 2010, value: 50}, {year: 2012, value: 40}, {year: 2014, value: 55},
+                        {year: 2016, value: 50}, {year: 2018, value: 55}, {year: 2020, value: 60},
+                        {year: 2021, value: 80}, {year: 2022, value: 50}, {year: 2024, value: 55}
+                    ]
+                }
+            ];
+            
+            const xScale = d3.scaleLinear()
+                .domain([2010, 2024])
+                .range([margin.left, width - margin.right]);
+            
+            const yScale = d3.scaleLog()
+                .domain([1, 1200])
+                .range([height - margin.bottom, margin.top]);
+            
+            const line = d3.line()
+                .x(d => xScale(d.year))
+                .y(d => yScale(d.value))
+                .curve(d3.curveCardinal);
+            
+            companies.forEach(company => {
+                svg.append("path")
+                    .datum(company.data)
+                    .attr("fill", "none")
+                    .attr("stroke", company.color)
+                    .attr("stroke-width", 3)
+                    .attr("d", line);
+                
+                // Data points
+                svg.selectAll(`.point-${company.name}`)
+                    .data(company.data)
+                    .enter().append("circle")
+                    .attr("class", `point-${company.name}`)
+                    .attr("cx", d => xScale(d.year))
+                    .attr("cy", d => yScale(d.value))
+                    .attr("r", 4)
+                    .attr("fill", company.color)
+                    .attr("stroke", "#fff")
+                    .attr("stroke-width", 1)
+                    .on("mouseover", function(event, d) {
+                        showTooltip(event, `<strong>${company.name}</strong><br>Year: ${d.year}<br>Market Cap: $${d.value}B`);
+                    })
+                    .on("mouseout", hideTooltip);
+            });
+            
+            // Axes
+            svg.append("g")
+                .attr("transform", `translate(0,${height - margin.bottom})`)
+                .call(d3.axisBottom(xScale).tickFormat(d3.format("d")))
+                .attr("color", "#ccc");
+            
+            svg.append("g")
+                .attr("transform", `translate(${margin.left},0)`)
+                .call(d3.axisLeft(yScale).tickFormat(d => `$${d}B`))
+                .attr("color", "#ccc");
+            
+            // Legend
+            const legend = svg.append("g")
+                .attr("transform", `translate(${width - 90}, 50)`);
+            
+            companies.forEach((company, i) => {
+                const y = i * 20;
+                legend.append("line")
+                    .attr("x1", 0).attr("x2", 15)
+                    .attr("y1", y).attr("y2", y)
+                    .attr("stroke", company.color)
+                    .attr("stroke-width", 3);
+                
+                legend.append("text")
+                    .attr("x", 20).attr("y", y + 4)
+                    .text(company.name)
+                    .attr("fill", "#ccc")
+                    .attr("font-size", "12px");
+            });
+        }
+        
+        // Revenue Streams Sankey Diagram
+        function createRevenueSankey() {
+            const container = d3.select("#revenue-sankey");
+            const width = 900;
+            const height = 400;
+            
+            const svg = container.append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            
+            // Simplified Sankey-style flow diagram
+            const nodes = [
+                // Sources
+                {id: "Vehicle Sales", x: 50, y: 100, width: 100, height: 40, color: "#dc143c", value: 85},
+                {id: "Energy Storage", x: 50, y: 160, width: 100, height: 25, color: "#ff6b7a", value: 8},
+                {id: "Services", x: 50, y: 200, width: 100, height: 20, color: "#ff9ff3", value: 5},
+                {id: "Software", x: 50, y: 235, width: 100, height: 15, color: "#f368e0", value: 2},
+                
+                // Intermediate
+                {id: "Manufacturing", x: 300, y: 80, width: 120, height: 50, color: "#666", value: 60},
+                {id: "Technology Dev", x: 300, y: 150, width: 120, height: 30, color: "#888", value: 20},
+                {id: "Operations", x: 300, y: 195, width: 120, height: 25, color: "#aaa", value: 15},
+                {id: "R&D Investment", x: 300, y: 235, width: 120, height: 15, color: "#ccc", value: 5},
+                
+                // Destinations
+                {id: "Competitive Advantage", x: 650, y: 120, width: 150, height: 45, color: "#dc143c", value: 40},
+                {id: "Market Share", x: 650, y: 180, width: 150, height: 35, color: "#ff4757", value: 30},
+                {id: "Future Growth", x: 650, y: 230, width: 150, height: 25, color: "#ff6b7a", value: 20},
+                {id: "Innovation Pipeline", x: 650, y: 270, width: 150, height: 20, color: "#ff9ff3", value: 10}
+            ];
+            
+            // Draw nodes
+            nodes.forEach(node => {
+                svg.append("rect")
+                    .attr("x", node.x)
+                    .attr("y", node.y)
+                    .attr("width", node.width)
+                    .attr("height", node.height)
+                    .attr("fill", node.color)
+                    .attr("opacity", 0.8)
+                    .attr("rx", 5)
+                    .on("mouseover", function(event) {
+                        showTooltip(event, `<strong>${node.id}</strong><br>Value: ${node.value}%`);
+                    })
+                    .on("mouseout", hideTooltip);
+                
+                svg.append("text")
+                    .attr("x", node.x + node.width/2)
+                    .attr("y", node.y + node.height/2)
+                    .attr("text-anchor", "middle")
+                    .attr("dy", ".35em")
+                    .attr("fill", "white")
+                    .attr("font-size", "11px")
+                    .attr("font-weight", "bold")
+                    .text(node.id);
+            });
+            
+            // Draw flows (simplified)
+            const flows = [
+                {from: 0, to: 4, width: 8}, {from: 1, to: 5, width: 3},
+                {from: 2, to: 6, width: 2}, {from: 3, to: 7, width: 1},
+                {from: 4, to: 8, width: 6}, {from: 5, to: 9, width: 4},
+                {from: 6, to: 10, width: 3}, {from: 7, to: 11, width: 2}
+            ];
+            
+            flows.forEach(flow => {
+                const fromNode = nodes[flow.from];
+                const toNode = nodes[flow.to];
+                
+                svg.append("path")
+                    .attr("d", `M ${fromNode.x + fromNode.width} ${fromNode.y + fromNode.height/2} 
+                               Q ${(fromNode.x + fromNode.width + toNode.x)/2} ${fromNode.y + fromNode.height/2}
+                               ${toNode.x} ${toNode.y + toNode.height/2}`)
+                    .attr("stroke", fromNode.color)
+                    .attr("stroke-width", flow.width)
+                    .attr("fill", "none")
+                    .attr("opacity", 0.4);
+            });
+        }
+        
+        // Financial Performance Matrix
+        function createFinancialMatrix() {
+            const container = d3.select("#financial-matrix");
+            const width = 500;
+            const height = 400;
+            const margin = {top: 60, right: 30, bottom: 100, left: 100};
+            
+            const svg = container.append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            
+            const companies = ["Tesla", "Toyota", "GM", "Ford", "BMW", "Mercedes"];
+            const metrics = ["Revenue Growth", "Profit Margin", "ROE", "Market Cap/Rev", "Innovation Index"];
+            
+            const data = [
+                [9, 6, 8, 10, 10], // Tesla
+                [4, 8, 7, 3, 5],   // Toyota
+                [3, 5, 6, 2, 4],   // GM
+                [2, 4, 5, 2, 3],   // Ford
+                [5, 7, 7, 4, 6],   // BMW
+                [4, 7, 6, 3, 5]    // Mercedes
+            ];
+            
+            const cellWidth = (width - margin.left - margin.right) / metrics.length;
+            const cellHeight = (height - margin.top - margin.bottom) / companies.length;
+            
+            const colorScale = d3.scaleSequential(d3.interpolateRdYlGn)
+                .domain([1, 10]);
+            
+            // Create cells
+            companies.forEach((company, i) => {
+                metrics.forEach((metric, j) => {
+                    const value = data[i][j];
+                    
+                    svg.append("rect")
+                        .attr("class", "matrix-cell")
+                        .attr("x", margin.left + j * cellWidth)
+                        .attr("y", margin.top + i * cellHeight)
+                        .attr("width", cellWidth)
+                        .attr("height", cellHeight)
+                        .attr("fill", colorScale(value))
+                        .on("mouseover", function(event) {
+                            showTooltip(event, `<strong>${company}</strong><br>${metric}: ${value}/10`);
+                        })
+                        .on("mouseout", hideTooltip);
+                    
+                    svg.append("text")
+                        .attr("class", "heatmap-label")
+                        .attr("x", margin.left + j * cellWidth + cellWidth/2)
+                        .attr("y", margin.top + i * cellHeight + cellHeight/2)
+                        .text(value);
+                });
+            });
+            
+            // Labels
+            svg.selectAll(".company-label")
+                .data(companies)
+                .enter().append("text")
+                .attr("class", "company-label")
+                .attr("x", margin.left - 10)
+                .attr("y", (d, i) => margin.top + i * cellHeight + cellHeight/2)
+                .attr("text-anchor", "end")
+                .attr("dy", ".35em")
+                .attr("fill", "#ccc")
+                .attr("font-size", "12px")
+                .text(d => d);
+            
+            svg.selectAll(".metric-label")
+                .data(metrics)
+                .enter().append("text")
+                .attr("class", "metric-label")
+                .attr("x", (d, i) => margin.left + i * cellWidth + cellWidth/2)
+                .attr("y", margin.top - 10)
+                .attr("text-anchor", "middle")
+                .attr("fill", "#ccc")
+                .attr("font-size", "11px")
+                .text(d => d)
+                .attr("transform", (d, i) => `rotate(-45, ${margin.left + i * cellWidth + cellWidth/2}, ${margin.top - 10})`);
+        }
+        
+        // Investment Thesis Timeline
+        function createInvestmentTimeline() {
+            const container = d3.select("#investment-timeline");
+            const width = 500;
+            const height = 400;
+            const margin = {top: 30, right: 30, bottom: 50, left: 60};
+            
+            const svg = container.append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            
+            const phases = [
+                {period: "2008-2012", thesis: "Luxury EV Pioneer", confidence: 30, valuation: 5, risk: 90},
+                {period: "2013-2016", thesis: "Premium Mass Market", confidence: 50, valuation: 25, risk: 70},
+                {period: "2017-2019", thesis: "Production Scaling", confidence: 65, valuation: 60, risk: 60},
+                {period: "2020-2021", thesis: "Market Leader", confidence: 85, valuation: 800, risk: 40},
+                {period: "2022-2024", thesis: "Tech Platform", confidence: 75, valuation: 750, risk: 50}
+            ];
+            
+            const xScale = d3.scaleBand()
+                .domain(phases.map(d => d.period))
+                .range([margin.left, width - margin.right])
+                .padding(0.2);
+            
+            const yScale = d3.scaleLinear()
+                .domain([0, 100])
+                .range([height - margin.bottom, margin.top]);
+            
+            // Confidence bars
+            svg.selectAll(".confidence-bar")
+                .data(phases)
+                .enter().append("rect")
+                .attr("class", "confidence-bar")
+                .attr("x", d => xScale(d.period))
+                .attr("y", d => yScale(d.confidence))
+                .attr("width", xScale.bandwidth())
+                .attr("height", d => yScale(0) - yScale(d.confidence))
+                .attr("fill", "#dc143c")
+                .attr("opacity", 0.7)
+                .on("mouseover", function(event, d) {
+                    showTooltip(event, `<strong>${d.period}</strong><br>Thesis: ${d.thesis}<br>Confidence: ${d.confidence}%<br>Valuation: $${d.valuation}B<br>Risk Level: ${d.risk}%`);
+                })
+                .on("mouseout", hideTooltip);
+            
+            // Risk line
+            const riskLine = d3.line()
+                .x(d => xScale(d.period) + xScale.bandwidth()/2)
+                .y(d => yScale(d.risk))
+                .curve(d3.curveCardinal);
+            
+            svg.append("path")
+                .datum(phases)
+                .attr("fill", "none")
+                .attr("stroke", "#ff6b7a")
+                .attr("stroke-width", 3)
+                .attr("stroke-dasharray", "5,5")
+                .attr("d", riskLine);
+            
+            // Risk points
+            svg.selectAll(".risk-point")
+                .data(phases)
+                .enter().append("circle")
+                .attr("class", "risk-point")
+                .attr("cx", d => xScale(d.period) + xScale.bandwidth()/2)
+                .attr("cy", d => yScale(d.risk))
+                .attr("r", 4)
+                .attr("fill", "#ff6b7a")
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 2);
+            
+            // Axes
+            svg.append("g")
+                .attr("transform", `translate(0,${height - margin.bottom})`)
+                .call(d3.axisBottom(xScale))
+                .attr("color", "#ccc")
+                .selectAll("text")
+                .attr("transform", "rotate(-45)")
+                .style("text-anchor", "end");
+            
+            svg.append("g")
+                .attr("transform", `translate(${margin.left},0)`)
+                .call(d3.axisLeft(yScale))
+                .attr("color", "#ccc");
+            
+            // Legend
+            const legend = svg.append("g")
+                .attr("transform", `translate(${width - 120}, 50)`);
+            
+            legend.append("rect")
+                .attr("width", 15).attr("height", 15)
+                .attr("fill", "#dc143c").attr("opacity", 0.7);
+            legend.append("text")
+                .attr("x", 20).attr("y", 12)
+                .text("Confidence").attr("fill", "#ccc").attr("font-size", "11px");
+            
+            legend.append("line")
+                .attr("x1", 0).attr("x2", 15)
+                .attr("y1", 25).attr("y2", 25)
+                .attr("stroke", "#ff6b7a")
+                .attr("stroke-width", 3)
+                .attr("stroke-dasharray", "3,3");
+            legend.append("text")
+                .attr("x", 20).attr("y", 29)
+                .text("Risk Level").attr("fill", "#ccc").attr("font-size", "11px");
+        }
+        
+        // Tooltip functions
+        function showTooltip(event, content) {
+            const tooltip = d3.select("#tooltip");
+            tooltip.transition().duration(200).style("opacity", .9);
+            tooltip.html(content)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        }
+        
+        function hideTooltip() {
+            d3.select("#tooltip").transition().duration(500).style("opacity", 0);
+        }
+        
+        // Initialize all visualizations
+        createCostWaterfall();
+        createMarketCapEvolution();
+        createRevenueSankey();
+        createFinancialMatrix();
+        createInvestmentTimeline();
+    </script>
+</body>
+</html>

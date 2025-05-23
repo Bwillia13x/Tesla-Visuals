@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tesla Strategic Market Research - Enhanced Analysis 2024-2025</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #fafafa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 300;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+            font-weight: 300;
+        }
+        
+        .chart-container {
+            margin: 40px 0;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 1px 10px rgba(0,0,0,0.05);
+        }
+        
+        .chart-title {
+            font-size: 1.5em;
+            color: #34495e;
+            margin-bottom: 15px;
+            font-weight: 400;
+            text-align: center;
+        }
+        
+        .chart-description {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 0.95em;
+        }
+        
+        .insights-panel {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 8px;
+            margin: 30px 0;
+            border-left: 4px solid #81A2B8;
+        }
+        
+        .insights-title {
+            color: #2c3e50;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .insights-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .insights-list li {
+            margin: 10px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .insights-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #81A2B8;
+            font-weight: bold;
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tesla Strategic Market Research</h1>
+        <div class="subtitle">Enhanced Analysis 2024-2025: Navigating Competition and Diversification</div>
+        
+        <div class="insights-panel">
+            <div class="insights-title">Key Research Findings</div>
+            <ul class="insights-list">
+                <li>Tesla's energy business emerging as a significant growth driver beyond automotive</li>
+                <li>Market share pressures intensifying in both U.S. and European markets</li>
+                <li>Competition from Chinese manufacturers reshaping global EV landscape</li>
+                <li>Economic headwinds affecting premium vehicle demand and financing</li>
+                <li>Policy uncertainty creating strategic planning challenges</li>
+            </ul>
+        </div>
+
+        <!-- Chart 1: Tesla Revenue Diversification -->
+        <div class="chart-container">
+            <div class="chart-title">Tesla Revenue Diversification Strategy (2020-2024)</div>
+            <div class="chart-description">Tracking Tesla's successful expansion beyond automotive into energy and services</div>
+            <div id="revenue-diversification" style="height: 400px;"></div>
+        </div>
+
+        <!-- Chart 2: Market Share Evolution -->
+        <div class="chart-container">
+            <div class="chart-title">Tesla EV Market Share Under Pressure (2022-2024)</div>
+            <div class="chart-description">Regional analysis showing competitive pressures across key markets</div>
+            <div id="market-share-evolution" style="height: 400px;"></div>
+        </div>
+
+        <!-- Chart 3: Global EV Market Dynamics -->
+        <div class="chart-container">
+            <div class="chart-title">Global EV Market Growth Trajectory (2024-2027)</div>
+            <div class="chart-description">Market size projections and Tesla's position in expanding landscape</div>
+            <div id="ev-market-dynamics" style="height: 400px;"></div>
+        </div>
+
+        <!-- Chart 4: Competition Analysis -->
+        <div class="chart-container">
+            <div class="chart-title">EV Competition Intensity Heatmap (2024)</div>
+            <div class="chart-description">Competitive positioning across key markets and segments</div>
+            <div id="competition-heatmap" style="height: 500px;"></div>
+        </div>
+
+        <!-- Grid Container for Smaller Charts -->
+        <div class="grid-container">
+            <!-- Chart 5: Battery Cost Trends -->
+            <div class="chart-container">
+                <div class="chart-title">Battery Cost Evolution</div>
+                <div class="chart-description">Technology cost reduction trends</div>
+                <div id="battery-costs" style="height: 300px;"></div>
+            </div>
+
+            <!-- Chart 6: Interest Rate Impact -->
+            <div class="chart-container">
+                <div class="chart-title">Economic Headwinds</div>
+                <div class="chart-description">Interest rates and auto loan trends</div>
+                <div id="economic-impact" style="height: 300px;"></div>
+            </div>
+        </div>
+
+        <!-- Chart 7: Scenario Analysis -->
+        <div class="chart-container">
+            <div class="chart-title">Tesla Strategic Scenario Analysis (2025-2029)</div>
+            <div class="chart-description">Updated financial projections across different market scenarios</div>
+            <div id="scenario-analysis" style="height: 450px;"></div>
+        </div>
+
+        <div class="insights-panel">
+            <div class="insights-title">Strategic Implications for 2025-2026</div>
+            <ul class="insights-list">
+                <li>Accelerate Model refresh cycles to maintain competitive edge</li>
+                <li>Scale Megapack production to capitalize on energy storage demand</li>
+                <li>Develop region-specific strategies for European and Chinese markets</li>
+                <li>Prepare for potential subsidy reductions through cost competitiveness</li>
+                <li>Strengthen competitive moats beyond first-mover advantages</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Jony Ive inspired color palette
+        const colors = {
+            blue1: '#81A2B8',
+            blue2: '#A5C1D8',
+            orange1: '#F3B9A1',
+            orange2: '#F7CDB4',
+            green1: '#A8D8A8',
+            green2: '#C1E6C1',
+            red1: '#E8A5A5',
+            red2: '#F0C1C1',
+            purple1: '#B8A5D8',
+            purple2: '#D1C4E6',
+            grey_light: '#F8F9FA',
+            grey_medium: '#DEE2E6',
+            grey_dark: '#495057',
+            white: '#FFFFFF'
+        };
+
+        const layoutDefaults = {
+            font: {
+                family: 'Helvetica Neue, Arial, sans-serif',
+                color: colors.grey_dark
+            },
+            paper_bgcolor: colors.white,
+            plot_bgcolor: colors.white,
+            margin: { t: 50, r: 50, b: 80, l: 80 }
+        };
+
+        // Chart 1: Revenue Diversification
+        const revenueDiversification = {
+            x: ['2020', '2021', '2022', '2023', '2024'],
+            y: [31.5, 53.8, 81.5, 96.8, 105.2],
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Total Revenue',
+            line: { color: colors.blue1, width: 3 },
+            marker: { size: 8, color: colors.blue1 }
+        };
+
+        const automotiveRevenue = {
+            x: ['2020', '2021', '2022', '2023', '2024'],
+            y: [27.2, 44.1, 67.2, 78.5, 82.4],
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Automotive',
+            line: { color: colors.orange1, width: 2 },
+            marker: { size: 6, color: colors.orange1 }
+        };
+
+        const energyRevenue = {
+            x: ['2020', '2021', '2022', '2023', '2024'],
+            y: [1.9, 2.8, 3.9, 6.0, 12.1],
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Energy & Storage',
+            line: { color: colors.green1, width: 2 },
+            marker: { size: 6, color: colors.green1 }
+        };
+
+        const servicesRevenue = {
+            x: ['2020', '2021', '2022', '2023', '2024'],
+            y: [2.4, 6.9, 10.4, 12.3, 10.7],
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Services',
+            line: { color: colors.purple1, width: 2 },
+            marker: { size: 6, color: colors.purple1 }
+        };
+
+        Plotly.newPlot('revenue-diversification', 
+            [revenueDiversification, automotiveRevenue, energyRevenue, servicesRevenue], 
+            {
+                ...layoutDefaults,
+                title: { text: 'Revenue Growth by Segment ($B)', font: { size: 16 } },
+                xaxis: { title: 'Year', gridcolor: colors.grey_medium },
+                yaxis: { title: 'Revenue ($B)', gridcolor: colors.grey_medium },
+                legend: { x: 0.02, y: 0.98 }
+            }
+        );
+
+        // Chart 2: Market Share Evolution
+        const marketShareData = [
+            {
+                x: ['Q1 2022', 'Q2 2022', 'Q3 2022', 'Q4 2022', 'Q1 2023', 'Q2 2023', 'Q3 2023', 'Q4 2023', 'Q1 2024', 'Q2 2024'],
+                y: [78.5, 76.2, 74.1, 71.8, 68.4, 65.2, 62.7, 59.3, 55.8, 52.1],
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'US Market Share (%)',
+                line: { color: colors.blue1, width: 3 },
+                marker: { size: 7 }
+            },
+            {
+                x: ['Q1 2022', 'Q2 2022', 'Q3 2022', 'Q4 2022', 'Q1 2023', 'Q2 2023', 'Q3 2023', 'Q4 2023', 'Q1 2024', 'Q2 2024'],
+                y: [22.8, 21.3, 19.7, 18.1, 16.8, 15.2, 13.9, 12.4, 11.1, 9.8],
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Europe Market Share (%)',
+                line: { color: colors.red1, width: 3 },
+                marker: { size: 7 }
+            }
+        ];
+
+        Plotly.newPlot('market-share-evolution', marketShareData, {
+            ...layoutDefaults,
+            title: { text: 'Tesla EV Market Share Decline Across Regions', font: { size: 16 } },
+            xaxis: { title: 'Quarter', gridcolor: colors.grey_medium },
+            yaxis: { title: 'Market Share (%)', gridcolor: colors.grey_medium },
+            legend: { x: 0.7, y: 0.9 }
+        });
+
+        // Chart 3: EV Market Dynamics
+        const marketSizeData = [
+            {
+                x: ['2024', '2025', '2026', '2027'],
+                y: [14.2, 19.8, 26.7, 35.2],
+                type: 'bar',
+                name: 'Global EV Market Size',
+                marker: { color: colors.green1, opacity: 0.8 },
+                text: ['$14.2M', '$19.8M', '$26.7M', '$35.2M'],
+                textposition: 'auto'
+            }
+        ];
+
+        const teslaProjections = {
+            x: ['2024', '2025', '2026', '2027'],
+            y: [105.2, 125.6, 147.3, 170.8],
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Tesla Revenue Projection',
+            yaxis: 'y2',
+            line: { color: colors.blue1, width: 3 },
+            marker: { size: 8 }
+        };
+
+        Plotly.newPlot('ev-market-dynamics', [marketSizeData[0], teslaProjections], {
+            ...layoutDefaults,
+            title: { text: 'EV Market Growth vs Tesla Revenue Projections', font: { size: 16 } },
+            xaxis: { title: 'Year', gridcolor: colors.grey_medium },
+            yaxis: { title: 'Global EV Market (Million Units)', gridcolor: colors.grey_medium },
+            yaxis2: {
+                title: 'Tesla Revenue ($B)',
+                overlaying: 'y',
+                side: 'right',
+                gridcolor: colors.grey_medium
+            },
+            legend: { x: 0.02, y: 0.98 }
+        });
+
+        // Chart 4: Competition Heatmap
+        const competitors = ['Tesla', 'BYD', 'Volkswagen Group', 'General Motors', 'Ford', 'NIO', 'XPeng', 'BMW', 'Mercedes', 'Hyundai'];
+        const markets = ['US', 'China', 'Europe', 'Global'];
+        const competitionData = [
+            [9, 3, 7, 8],  // Tesla
+            [2, 10, 4, 9], // BYD
+            [5, 6, 9, 7],  // VW
+            [7, 2, 3, 5],  // GM
+            [6, 1, 2, 4],  // Ford
+            [1, 8, 1, 6],  // NIO
+            [1, 7, 1, 5],  // XPeng
+            [4, 5, 8, 6],  // BMW
+            [3, 4, 6, 5],  // Mercedes
+            [5, 7, 5, 7]   // Hyundai
+        ];
+
+        Plotly.newPlot('competition-heatmap', [{
+            z: competitionData,
+            x: markets,
+            y: competitors,
+            type: 'heatmap',
+            colorscale: [
+                [0, colors.grey_light],
+                [0.5, colors.orange1],
+                [1, colors.red1]
+            ],
+            showscale: true,
+            colorbar: {
+                title: 'Competitive Strength',
+                titleside: 'right'
+            }
+        }], {
+            ...layoutDefaults,
+            title: { text: 'EV Market Competitive Positioning (1-10 Scale)', font: { size: 16 } },
+            xaxis: { title: 'Market Region' },
+            yaxis: { title: 'Manufacturer' }
+        });
+
+        // Chart 5: Battery Costs
+        const batteryCostData = {
+            x: ['2020', '2021', '2022', '2023', '2024', '2025E'],
+            y: [137, 123, 114, 108, 95, 85],
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Battery Cost ($/kWh)',
+            line: { color: colors.green1, width: 3 },
+            marker: { size: 8 }
+        };
+
+        Plotly.newPlot('battery-costs', [batteryCostData], {
+            ...layoutDefaults,
+            title: { text: 'Battery Cost Reduction Trend', font: { size: 14 } },
+            xaxis: { title: 'Year', gridcolor: colors.grey_medium },
+            yaxis: { title: 'Cost ($/kWh)', gridcolor: colors.grey_medium },
+            margin: { t: 40, r: 30, b: 60, l: 60 }
+        });
+
+        // Chart 6: Economic Impact
+        const interestRateData = {
+            x: ['2022', '2023', '2024', '2025E'],
+            y: [2.5, 5.2, 5.8, 4.8],
+            type: 'bar',
+            name: 'Fed Funds Rate (%)',
+            marker: { color: colors.red1, opacity: 0.8 }
+        };
+
+        const autoLoanData = {
+            x: ['2022', '2023', '2024', '2025E'],
+            y: [4.8, 7.9, 8.4, 7.1],
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Auto Loan Rate (%)',
+            yaxis: 'y2',
+            line: { color: colors.blue1, width: 3 },
+            marker: { size: 6 }
+        };
+
+        Plotly.newPlot('economic-impact', [interestRateData, autoLoanData], {
+            ...layoutDefaults,
+            title: { text: 'Interest Rate Environment', font: { size: 14 } },
+            xaxis: { title: 'Year', gridcolor: colors.grey_medium },
+            yaxis: { title: 'Fed Funds Rate (%)', gridcolor: colors.grey_medium },
+            yaxis2: {
+                title: 'Auto Loan Rate (%)',
+                overlaying: 'y',
+                side: 'right'
+            },
+            margin: { t: 40, r: 60, b: 60, l: 60 },
+            legend: { x: 0.02, y: 0.98 }
+        });
+
+        // Chart 7: Scenario Analysis
+        const scenarios = ['Bear Case', 'Base Case', 'Bull Case'];
+        const years = ['2025', '2026', '2027', '2028', '2029'];
+        
+        const bearCase = {
+            x: years,
+            y: [115, 125, 135, 145, 155],
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Bear Case (10-15% CAGR)',
+            line: { color: colors.red1, width: 2, dash: 'dash' },
+            marker: { size: 6 }
+        };
+
+        const baseCase = {
+            x: years,
+            y: [125, 145, 170, 200, 235],
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Base Case (15-20% CAGR)',
+            line: { color: colors.blue1, width: 3 },
+            marker: { size: 8 }
+        };
+
+        const bullCase = {
+            x: years,
+            y: [135, 175, 225, 290, 370],
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: 'Bull Case (25-30% CAGR)',
+            line: { color: colors.green1, width: 2, dash: 'dot' },
+            marker: { size: 6 }
+        };
+
+        Plotly.newPlot('scenario-analysis', [bearCase, baseCase, bullCase], {
+            ...layoutDefaults,
+            title: { text: 'Tesla Revenue Scenarios ($B)', font: { size: 16 } },
+            xaxis: { title: 'Year', gridcolor: colors.grey_medium },
+            yaxis: { title: 'Revenue ($B)', gridcolor: colors.grey_medium },
+            legend: { x: 0.02, y: 0.98 },
+            annotations: [
+                {
+                    x: '2027',
+                    y: 290,
+                    text: 'Autonomous driving<br>breakthrough scenario',
+                    showarrow: true,
+                    arrowhead: 2,
+                    arrowsize: 1,
+                    arrowwidth: 1,
+                    arrowcolor: colors.grey_dark,
+                    font: { size: 11, color: colors.grey_dark }
+                }
+            ]
+        });
+
+        // Add responsive behavior
+        window.addEventListener('resize', function() {
+            Plotly.Plots.resize('revenue-diversification');
+            Plotly.Plots.resize('market-share-evolution');
+            Plotly.Plots.resize('ev-market-dynamics');
+            Plotly.Plots.resize('competition-heatmap');
+            Plotly.Plots.resize('battery-costs');
+            Plotly.Plots.resize('economic-impact');
+            Plotly.Plots.resize('scenario-analysis');
+        });
+    </script>
+</body>
+</html>

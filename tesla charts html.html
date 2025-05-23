@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tesla Business Strategy Charts</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+    body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f8f9fa;
+        color: #333;
+    }
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 40px;
+        font-weight: 300;
+    }
+    h2 {
+        text-align: left;
+        color: #34495e;
+        margin-top: 20px; /* Adjusted for grid layout */
+        margin-bottom: 10px;
+        font-weight: 400;
+        font-size: 1.3em;
+        border-bottom: 1px solid #bdc3c7;
+        padding-bottom: 5px;
+    }
+    .chart-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); /* Responsive grid */
+        gap: 25px;
+    }
+    .chart-item { /* Wrapper for H2 and chart-container */
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        display: flex;
+        flex-direction: column;
+    }
+    .chart-container {
+        width: 100%;
+        height: 400px; /* Fixed height for the container that holds the canvas */
+        position: relative; /* Crucial for Chart.js responsiveness */
+        box-sizing: border-box;
+        margin-top: 10px; /* Space between title and chart */
+    }
+    .chart-container canvas {
+        /* Chart.js with responsive:true and maintainAspectRatio:false will fill the parent.
+           The parent (.chart-container) has a fixed height and width (100% of .chart-item). */
+        max-width: 100%;
+        max-height: 100%;
+    }
+    </style>
+</head>
+<body>
+    <h1>Tesla Business & Strategy Analysis (2018-2023)</h1>
+
+    <div class="chart-grid">
+        <div class="chart-item">
+            <h2>1. Financial Performance Evolution</h2>
+            <div class="chart-container">
+                <canvas id="financialPerformanceChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-item">
+            <h2>2. Vehicle Production & Deliveries</h2>
+            <div class="chart-container">
+                <canvas id="productionDeliveriesChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-item">
+            <h2>3. Revenue Breakdown by Segment (2023)</h2>
+            <div class="chart-container">
+                <canvas id="revenueBreakdownChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-item">
+            <h2>4. Supercharger Network Growth</h2>
+            <div class="chart-container">
+                <canvas id="superchargerNetworkChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-item">
+            <h2>5. Global Sales Distribution (2023)</h2>
+            <div class="chart-container">
+                <canvas id="globalSalesDistributionChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-item">
+            <h2>6. R&D Expenditure Over Time</h2>
+            <div class="chart-container">
+                <canvas id="rAndDExpenditureChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-item">
+            <h2>7. Stock Price Performance</h2>
+            <div class="chart-container">
+                <canvas id="stockPriceChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-item">
+            <h2>8. Market Cap vs Competitors (2023)</h2>
+            <div class="chart-container">
+                <canvas id="marketCapChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-item">
+            <h2>9. Energy Storage Deployments (MWh)</h2>
+            <div class="chart-container">
+                <canvas id="energyStorageChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-item">
+            <h2>10. FSD Beta Rollout Progress</h2>
+            <div class="chart-container">
+                <canvas id="fsdBetaChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-item">
+            <h2>11. Business Model Canvas - Key Components</h2>
+            <div class="chart-container">
+                <canvas id="businessModelCanvasChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-item">
+            <h2>12. Customer Satisfaction Scores</h2>
+            <div class="chart-container">
+                <canvas id="customerSatisfactionChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-item">
+            <h2>13. SWOT Analysis (Simplified Radar)</h2>
+            <div class="chart-container">
+                <canvas id="swotAnalysisChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-item">
+            <h2>14. Future Growth Vectors (Conceptual)</h2>
+            <div class="chart-container">
+                <canvas id="futureGrowthChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data for Chart 1: Tesla Financial Performance Evolution
+        const years = [2010, 2011, 2012, 2013];
+        const revenue = [117, 204, 413, 967];
+        const grossProfit = [31, 62, 30, 197];
+        const grossMargin = [26, 30, 7, 20];
+
+        new Chart(document.getElementById('financialPerformanceChart'), {
+            type: 'bar',
+            data: {
+                labels: years,
+                datasets: [
+                    {
+                        label: 'Revenue ($M)',
+                        data: revenue,
+                        backgroundColor: 'rgba(46, 134, 171, 0.8)', // #2E86AB
+                        borderColor: 'rgba(46, 134, 171, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'y',
+                    },
+                    {
+                        label: 'Gross Profit ($M)',
+                        data: grossProfit,
+                        backgroundColor: 'rgba(162, 59, 114, 0.8)', // #A23B72
+                        borderColor: 'rgba(162, 59, 114, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'y',
+                    },
+                    {
+                        label: 'Gross Margin (%)',
+                        data: grossMargin,
+                        type: 'line',
+                        borderColor: 'rgba(241, 143, 1, 1)', // #F18F01
+                        backgroundColor: 'rgba(241, 143, 1, 0.2)',
+                        fill: false,
+                        yAxisID: 'y1',
+                        tension: 0.1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: false, // Already have a title in H2
+                        text: 'Tesla Financial Performance Evolution (2010-2013)',
+                        font: { size: 18 }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Year'
+                        },
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Revenue & Gross Profit ($M)'
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Gross Margin (%)'
+                        },
+                        grid: {
+                            drawOnChartArea: false, // only draw grid for y axis
+                        },
+                        min: 0,
+                        max: Math.max(...grossMargin) + 5 // Adjust for better visibility
+                    }
+                }
+            }
+        });
+
+        // Data for Chart 2: Tesla Vehicle Production and Deliveries
+        const productionYears = ['2018', '2019', '2020', '2021', '2022', '2023'];
+        const productionData = [254530, 365232, 509737, 930422, 1369611, 1845985];
+        const deliveriesData = [245240, 367656, 499550, 936172, 1313851, 1808581];
+
+        // Chart 2: Tesla Vehicle Production and Deliveries
+        const productionDeliveriesCtx = document.getElementById('productionDeliveriesChart').getContext('2d');
+        new Chart(productionDeliveriesCtx, {
+            type: 'bar',
+            data: {
+                labels: productionYears,
+                datasets: [{
+                    label: 'Production',
+                    data: productionData,
+                    backgroundColor: 'rgba(0, 123, 255, 0.7)', // Blue
+                    borderColor: 'rgba(0, 123, 255, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'Deliveries',
+                    data: deliveriesData,
+                    backgroundColor: 'rgba(23, 162, 184, 0.7)', // Teal
+                    borderColor: 'rgba(23, 162, 184, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Tesla Vehicle Production and Deliveries (2018-2023)',
+                        font: {
+                            size: 18,
+                            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                        },
+                        color: '#333'
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Year',
+                            font: {
+                                size: 14,
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            color: '#555'
+                        },
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Vehicles (Units)',
+                            font: {
+                                size: 14,
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            color: '#555'
+                        },
+                        beginAtZero: true,
+                        grid: {
+                            color: '#e9e9e9',
+                            lineWidth: 0.5
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart 3: Tesla Revenue Breakdown by Segment (e.g., Automotive, Energy Generation and Storage, Services and Other)
+        const revenueBreakdownCtx = document.getElementById('revenueBreakdownChart').getContext('2d');
+        new Chart(revenueBreakdownCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Automotive', 'Energy Generation and Storage', 'Services and Other'],
+                datasets: [{
+                    label: 'Revenue Breakdown 2023',
+                    data: [82.4, 6.0, 8.3], // Example data in Billions USD, sum to 96.7B for 2023
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)', // Pink/Red
+                        'rgba(54, 162, 235, 0.7)', // Blue
+                        'rgba(255, 206, 86, 0.7)'  // Yellow
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Tesla Revenue Breakdown by Segment (2023)',
+                        font: {
+                            size: 18,
+                            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                        },
+                        color: '#333'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed + 'B USD';
+                                }
+                                return label;
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart 4: Tesla Supercharger Network Growth
+        const superchargerNetworkCtx = document.getElementById('superchargerNetworkChart').getContext('2d');
+        new Chart(superchargerNetworkCtx, {
+            type: 'line',
+            data: {
+                labels: ['2018', '2019', '2020', '2021', '2022', '2023'],
+                datasets: [{
+                    label: 'Supercharger Stations',
+                    data: [1421, 1821, 2564, 3476, 4678, 5952], // Example data
+                    borderColor: 'rgba(255, 159, 64, 1)', // Orange
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    fill: true,
+                    tension: 0.1,
+                    yAxisID: 'yStations'
+                }, {
+                    label: 'Connectors',
+                    data: [12000, 15000, 23277, 31498, 42862, 54892], // Example data
+                    borderColor: 'rgba(75, 192, 192, 1)', // Green
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true,
+                    tension: 0.1,
+                    yAxisID: 'yConnectors'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Tesla Supercharger Network Growth (2018-2023)',
+                        font: {
+                            size: 18,
+                            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                        },
+                        color: '#333'
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Year',
+                            font: {
+                                size: 14,
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            color: '#555'
+                        },
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    },
+                    yStations: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Supercharger Stations',
+                            font: {
+                                size: 14,
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            color: '#555'
+                        },
+                        grid: {
+                            color: '#e9e9e9',
+                            lineWidth: 0.5
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    },
+                    yConnectors: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Connectors',
+                            font: {
+                                size: 14,
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            color: '#555'
+                        },
+                        grid: {
+                            drawOnChartArea: false, // Only draw grid for yStations
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart 5: Tesla Global Sales Distribution (e.g., North America, Europe, China, Other)
+        const globalSalesCtx = document.getElementById('globalSalesDistributionChart').getContext('2d');
+        new Chart(globalSalesCtx, {
+            type: 'pie',
+            data: {
+                labels: ['North America', 'Europe', 'China', 'Asia Pacific (excl. China)', 'Other'],
+                datasets: [{
+                    label: 'Global Sales Distribution 2023',
+                    data: [45, 25, 20, 7, 3], // Example percentages
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)', // Pink/Red
+                        'rgba(54, 162, 235, 0.7)', // Blue
+                        'rgba(255, 206, 86, 0.7)', // Yellow
+                        'rgba(75, 192, 192, 0.7)', // Green
+                        'rgba(153, 102, 255, 0.7)' // Purple
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Tesla Global Sales Distribution (2023)',
+                        font: {
+                            size: 18,
+                            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                        },
+                        color: '#333'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed + '%';
+                                }
+                                return label;
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart 6: Tesla R&D Expenditure Over Time
+        const rAndDCtx = document.getElementById('rAndDExpenditureChart').getContext('2d');
+        new Chart(rAndDCtx, {
+            type: 'line',
+            data: {
+                labels: ['2018', '2019', '2020', '2021', '2022', '2023'],
+                datasets: [{
+                    label: 'R&D Expenditure (Billion USD)',
+                    data: [1.46, 1.34, 1.49, 2.59, 3.08, 3.97], // Example data
+                    borderColor: 'rgba(153, 102, 255, 1)', // Purple
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    fill: true,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Tesla R&D Expenditure (2018-2023)',
+                        font: {
+                            size: 18,
+                            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                        },
+                        color: '#333'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': $' + context.parsed.y + 'B';
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false // Hide legend for single dataset line chart
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Year',
+                            font: {
+                                size: 14,
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            color: '#555'
+                        },
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Expenditure (Billion USD)',
+                            font: {
+                                size: 14,
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            color: '#555'
+                        },
+                        beginAtZero: true,
+                        grid: {
+                            color: '#e9e9e9',
+                            lineWidth: 0.5
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            callback: function(value) {
+                                return '$' + value + 'B';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart 7: Tesla Stock Price Performance
+        const stockPriceCtx = document.getElementById('stockPriceChart').getContext('2d');
+        new Chart(stockPriceCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan 2020', 'Jul 2020', 'Jan 2021', 'Jul 2021', 'Jan 2022', 'Jul 2022', 'Jan 2023', 'Jul 2023'], // Example labels
+                datasets: [{
+                    label: 'TSLA Stock Price (USD)',
+                    data: [20, 100, 280, 230, 350, 250, 150, 250], // Example data (Adjusted close)
+                    borderColor: 'rgba(40, 167, 69, 1)', // Green
+                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                    fill: true,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: false, // Using H2 title
+                        text: 'Tesla Stock Price Performance (2020-2023)',
+                        font: {
+                            size: 18,
+                            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                        },
+                        color: '#333'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': $' + context.parsed.y;
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date',
+                            font: {
+                                size: 14,
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            color: '#555'
+                        },
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Stock Price (USD)',
+                            font: {
+                                size: 14,
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            color: '#555'
+                        },
+                        grid: {
+                            color: '#e9e9e9',
+                            lineWidth: 0.5
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            callback: function(value) {
+                                return '$' + value;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart 8: Tesla vs Competitors - Market Cap
+        const marketCapCtx = document.getElementById('marketCapChart').getContext('2d');
+        new Chart(marketCapCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Tesla', 'Toyota', 'BYD', 'Mercedes-Benz', 'Volkswagen', 'BMW', 'Ford', 'GM'],
+                datasets: [{
+                    label: 'Market Cap (Billion USD) - 2023',
+                    data: [750, 220, 90, 80, 75, 70, 48, 46], // Example data
+                    backgroundColor: [
+                        'rgba(220, 53, 69, 0.7)', // Tesla - Red
+                        'rgba(0, 123, 255, 0.7)',
+                        'rgba(23, 162, 184, 0.7)',
+                        'rgba(255, 193, 7, 0.7)',
+                        'rgba(40, 167, 69, 0.7)',
+                        'rgba(108, 117, 125, 0.7)',
+                        'rgba(253, 126, 20, 0.7)',
+                        'rgba(111, 66, 193, 0.7)'
+                    ],
+                    borderColor: 'rgba(54, 54, 54, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y', // Horizontal bar chart
+                plugins: {
+                    title: {
+                        display: false, // Using H2 title
+                        text: 'Tesla vs Competitors - Market Cap (2023)',
+                        font: {
+                            size: 18,
+                            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                        },
+                        color: '#333'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': $' + context.parsed.x + 'B';
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Market Cap (Billion USD)',
+                            font: {
+                                size: 14,
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            color: '#555'
+                        },
+                        grid: {
+                            color: '#e9e9e9',
+                            lineWidth: 0.5
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            callback: function(value) {
+                                return '$' + value + 'B';
+                            }
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart 9: Tesla Energy Storage Deployments
+        const energyStorageCtx = document.getElementById('energyStorageChart').getContext('2d');
+        new Chart(energyStorageCtx, {
+            type: 'bar',
+            data: {
+                labels: ['2018', '2019', '2020', '2021', '2022', '2023'],
+                datasets: [{
+                    label: 'Energy Storage Deployed (MWh)',
+                    data: [1042, 1651, 3022, 3992, 6541, 14724], // Example data
+                    backgroundColor: 'rgba(255, 193, 7, 0.7)', // Yellow
+                    borderColor: 'rgba(255, 193, 7, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: false, // Using H2 title
+                        text: 'Tesla Energy Storage Deployments (MWh)',
+                        font: {
+                            size: 18,
+                            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                        },
+                        color: '#333'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y.toLocaleString() + ' MWh';
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Year',
+                            font: {
+                                size: 14,
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            color: '#555'
+                        },
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Energy Storage Deployed (MWh)',
+                            font: {
+                                size: 14,
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            color: '#555'
+                        },
+                        beginAtZero: true,
+                        grid: {
+                            color: '#e9e9e9',
+                            lineWidth: 0.5
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart 10: Tesla FSD Beta Rollout Progress
+        const fsdBetaCtx = document.getElementById('fsdBetaChart').getContext('2d');
+        new Chart(fsdBetaCtx, {
+            type: 'line',
+            data: {
+                labels: ['Q4 2020', 'Q1 2021', 'Q2 2021', 'Q3 2021', 'Q4 2021', 'Q1 2022', 'Q2 2022', 'Q3 2022', 'Q4 2022', 'Q1 2023', 'Q2 2023', 'Q3 2023', 'Q4 2023'],
+                datasets: [{
+                    label: 'FSD Beta Users (Thousands)',
+                    data: [1, 2, 2, 7, 60, 100, 160, 160, 400, 400, 400, 400, 400], // Example data, plateauing then wider release
+                    borderColor: 'rgba(111, 66, 193, 1)', // Indigo
+                    backgroundColor: 'rgba(111, 66, 193, 0.2)',
+                    fill: true,
+                    tension: 0.2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: false, // Using H2 title
+                        text: 'Tesla FSD Beta Rollout Progress',
+                        font: {
+                            size: 18,
+                            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                        },
+                        color: '#333'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y.toLocaleString() + 'K';
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Quarter',
+                            font: {
+                                size: 14,
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            color: '#555'
+                        },
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'FSD Beta Users (Thousands)',
+                            font: {
+                                size: 14,
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            color: '#555'
+                        },
+                        beginAtZero: true,
+                        grid: {
+                            color: '#e9e9e9',
+                            lineWidth: 0.5
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            callback: function(value) {
+                                return value.toLocaleString() + 'K';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart 11: Tesla Business Model Canvas (Simplified Key Activities/Resources)
+        const businessModelCtx = document.getElementById('businessModelCanvasChart').getContext('2d');
+        new Chart(businessModelCtx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    'Vertical Integration (Manufacturing, Battery Tech)',
+                    'Direct Sales & Service Model',
+                    'Supercharger Network Infrastructure',
+                    'Software & FSD Development',
+                    'Brand & Marketing',
+                    'Energy Solutions (Solar & Storage)'
+                ],
+                datasets: [{
+                    label: 'Importance / Focus (Arbitrary Units)',
+                    data: [90, 85, 80, 95, 75, 70], // Example data
+                    backgroundColor: [
+                        'rgba(23, 162, 184, 0.7)', // Teal
+                        'rgba(46, 134, 171, 0.7)', // Dark Blue
+                        'rgba(255, 159, 64, 0.7)', // Orange
+                        'rgba(111, 66, 193, 0.7)', // Indigo
+                        'rgba(220, 53, 69, 0.7)', // Red
+                        'rgba(40, 167, 69, 0.7)'  // Green
+                    ],
+                    borderColor: 'rgba(54, 54, 54, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    title: {
+                        display: false, // Using H2 title
+                        text: 'Tesla Business Model Canvas - Key Components',
+                        font: {
+                            size: 18,
+                            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                        },
+                        color: '#333'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.x;
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Importance / Focus (Arbitrary Units)',
+                            font: {
+                                size: 14,
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            color: '#555'
+                        },
+                        grid: {
+                            color: '#e9e9e9',
+                            lineWidth: 0.5
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+                                autoSkip: false
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart 12: Customer Satisfaction Scores (Illustrative)
+        const satisfactionCtx = document.getElementById('customerSatisfactionChart').getContext('2d');
+        new Chart(satisfactionCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Overall', 'Performance', 'Technology', 'Service', 'Charging Experience'],
+                datasets: [{
+                    label: 'Satisfaction Score (out of 100)',
+                    data: [90, 95, 92, 75, 88], // Example data
+                    backgroundColor: [
+                        'rgba(0, 123, 255, 0.7)',
+                        'rgba(23, 162, 184, 0.7)',
+                        'rgba(40, 167, 69, 0.7)',
+                        'rgba(255, 193, 7, 0.7)',
+                        'rgba(220, 53, 69, 0.7)'
+                    ],
+                    borderColor: 'rgba(54, 54, 54, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: false, // Using H2 title
+                        text: 'Customer Satisfaction Scores (Illustrative)',
+                        font: {
+                            size: 18,
+                            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                        },
+                        color: '#333'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y;
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Score (out of 100)',
+                            font: {
+                                size: 14,
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            },
+                            color: '#555'
+                        },
+                        beginAtZero: true,
+                        max: 100,
+                        grid: {
+                            color: '#e9e9e9',
+                            lineWidth: 0.5
+                        },
+                        ticks: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart 13: Tesla SWOT Analysis (Simplified)
+        const swotCtx = document.getElementById('swotAnalysisChart').getContext('2d');
+        new Chart(swotCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Strengths (Brand, Tech)', 'Weaknesses (Production Scalability, Service)', 'Opportunities (Energy, FSD, New Markets)', 'Threats (Competition, Regulatory)'],
+                datasets: [{
+                    label: 'Impact / Significance',
+                    data: [8, 6, 9, 7], // Example data (scale 1-10)
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)', // Pink/Red
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(255, 99, 132, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: false, // Using H2 title
+                        text: 'Tesla SWOT Analysis (Simplified)',
+                        font: {
+                            size: 18,
+                            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                        },
+                        color: '#333'
+                    },
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    r: {
+                        angleLines: {
+                            display: true
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 10,
+                        pointLabels: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+                                size: 11
+                            },
+                            padding:15 // Add padding to prevent labels from overlapping chart area
+                        },
+                        ticks: {
+                            backdropColor: 'transparent',
+                            stepSize: 2
+                        },
+                         grid: {
+                            color: '#e9e9e9',
+                            lineWidth: 0.5
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart 14: Tesla Future Growth Vectors (Conceptual)
+        const futureGrowthCtx = document.getElementById('futureGrowthChart').getContext('2d');
+        new Chart(futureGrowthCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Autonomous Driving (FSD)', 'Energy Storage Solutions', 'Robotics (Optimus)', 'New Vehicle Segments', 'Global Expansion'],
+                datasets: [{
+                    label: 'Potential Impact / Focus',
+                    data: [30, 25, 20, 15, 10], // Example data (percentages or scores)
+                    backgroundColor: [
+                        'rgba(153, 102, 255, 0.7)', // Purple
+                        'rgba(255, 159, 64, 0.7)', // Orange
+                        'rgba(75, 192, 192, 0.7)',  // Green
+                        'rgba(54, 162, 235, 0.7)',  // Blue
+                        'rgba(255, 206, 86, 0.7)'   // Yellow
+                    ],
+                    borderColor: [
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: false, // Using H2 title
+                        text: 'Tesla Future Growth Vectors (Conceptual)',
+                        font: {
+                            size: 18,
+                            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                        },
+                        color: '#333'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed;
+                                }
+                                return label;
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
